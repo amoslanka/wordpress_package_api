@@ -27,7 +27,7 @@ class APIController
     $package = array('versions' => array());
 
     // Find any release.json files
-    foreach (glob(make_path(DOWNLOADS_ROOT_PATH, $slug, "*/release.json")) as $filepath) {
+    foreach (glob(make_path(DOWNLOADS_ROOT_PATH, $slug, "**/release.json")) as $filepath) {
       $release_data = json_decode(file_get_contents($filepath), true);
 
       // echo '<pre>';
@@ -77,7 +77,8 @@ class APIController
   public function index() 
   {
     header('Content-type: application/json');
-    print json_encode($this->packages);
+    $list = glob(make_path(DOWNLOADS_ROOT_PATH, "*/*/*/release.json"));
+    print json_encode($list);
   }
   
   /**
