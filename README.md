@@ -135,6 +135,8 @@ Displays all available content names, based on globbable `release.json` files. E
          } 
         
 
+Most of the available API calls mimic or relate closely to methods carried out by the Wordpress Plugins API. 
+
 Plugin and Theme Updaters
 -------------------------
 todo
