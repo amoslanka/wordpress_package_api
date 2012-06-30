@@ -1,7 +1,7 @@
 Wordpress Package API
 =====================
 
-An API for providing private plugin and theme data to a wordpress installation.
+An API for providing private plugin and theme data to a Wordpress installation, because there are those of us who wish to keep our plugins off the public servers.
 
 This module will act as a stand-alone server of data and files pertaining to Wordpress content that is intended to be kept private. In a way, it mimics [Wordpress's own plugins\_api](http://codex.wordpress.org/WordPress.org_API) and provides information about downloadable content. The most likely interaction with this type of data would be an installation of Wordpress plugins that need a private host for autoupdate functionality.
 
@@ -66,7 +66,74 @@ These two settings will typically coincide, particularly if the web hosting used
 
 API Methods
 -----------
-todo
+
+The API uses simple request params to determine its course of action. The most important param is the `action` param, which tells the controller which action to run. The `action` param is a required parameter on every request made to the API.
+
+The following api methods are enabled:
+
+**Index:**
+Displays all available content names, based on globbable `release.json` files. Example: 
+
+    http://api.example.com/wordpress/?action=index
+    => [
+        "packages/plugins/herp-derp/1.0/release.json",
+        "packages/plugins/herp-derp/1.2/release.json",
+        "packages/themes/foo/1.0/release.json",
+        "packages/themes/foo/2.0/release.json"
+      ]
+  
+**Show:** Displays all information about a specific package, but works in two modes. If a `version` param is provided, only information about that version is printed. If no version is provided, all version information will be printed. `slug`, the name of the package being requested is a required param. Examples: 
+
+    http://api.example.com/wordpress/?action=show&slug=plugins/herp-derp
+      => {
+           slug: "plugins/herp-derp"
+           versions: {
+             1.0: {
+               version: "1.0",
+               date: "2012-05-11 21:47:44 -0700",
+               package: "http://api.example.com/wordpress/packages/plugins/herp-derp/1.0/herp-derp-1.0.zip"
+             },
+             1.2: {
+               version: "1.2",
+               date: "2012-06-29 21:47:12 -0700",
+               package: "http://api.example.com/wordpress/packages/plugins/herp-derp/1.0/herp-derp-1.0.zip"
+            }
+          },
+      }
+      
+    http://api.example.com/wordpress/?action=show&slug=plugins/herp-derp&version=1.0
+      => {
+         version: "1.0",
+         date: "2012-05-11 21:47:44 -0700",
+         package: "http://api.example.com/wordpress/packages/plugins/herp-derp/1.0/herp-derp-1.0.zip"
+       } 
+    
+    http://api.example.com/wordpress/?action=show&slug=plugins/herp-derp&version=latest
+      => {
+         version: "1.2",
+         date: "2012-06-29 21:47:44 -0700",
+         package: "http://api.example.com/wordpress/packages/plugins/herp-derp/1.2/herp-derp-1.2.zip"
+       } 
+
+**Latest:** Displays the version-specific information about the latest version of the plugin. `slug` param is required. Example: 
+
+    http://api.example.com/wordpress/?action=latest&slug=plugins/herp-derp
+    => {
+         version: "1.2",
+         date: "2012-06-29 21:47:44 -0700",
+         package: "http://api.example.com/wordpress/packages/plugins/herp-derp/1.2/herp-derp-1.2.zip"
+       } 
+
+**Check:** Returns the information about the latest release of the requested `slug`, but adds a `new_version` attribute to the response if a newer version is available. `slug` and `version` params are required. Examples:
+
+    http://api.example.com/wordpress/?action=latest&slug=plugins/herp-derp
+      => {
+           date: "2012-06-29 21:47:44 -0700",
+           package: "http://api.example.com/wordpress/packages/plugins/herp-derp/1.2/herp-derp-1.2.zip",
+           new_version: "1.2",
+           slug: "plugins/herp-derp"
+         } 
+        
 
 Plugin and Theme Updaters
 -------------------------
