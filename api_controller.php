@@ -9,11 +9,6 @@ class APIController
 
   var $packages;
   
-  // public function __construct() 
-  // {
-  //   $this->build_packages();
-  // }
-  
   /**
    * Returns true if the controller exposes the provided action name as a public action.
    *
@@ -26,46 +21,6 @@ class APIController
     return in_array($a, array('index', 'show', 'latest', 'check'));
   }
   
-  /**
-   * Reads all content.json files in the releases directory and parses them into the 
-   * information used in later actions.
-   *
-   * @return void
-   * @author Amos Lanka
-   */
-  // private function build_packages()
-  // {
-  //   $packages = array();
-
-  //   foreach(glob("releases/*/contents.json") as $content) {
-  //     try {
-  //       $string = file_get_contents($content);
-  //       $version_data = json_decode($string, true);
-  //       // 
-  //       $version = $version_data['version'];
-  //       $date = $version_data['date'];
-  //       foreach($version_data['packages'] as $pkg) {
-  //         $name = $pkg['name'];
-  //         $zip = $pkg['zip'];
-
-  //         if (!isset($packages[$name])) $packages[$name] = array('versions' => array());
-  //         if (!isset($packages[$name]['versions'][$version])) {
-  //           $packages[$name]['versions'][$version] = array(
-  //             'version' => $version,
-  //             'date' => $date,
-  //             'package' => "http://www.cleanandcreative.com/themes/timeline/" . $zip
-  //           );
-  //         }
-  //       }
-  //     } catch (Exception $e) {
-  //       // throw $e;
-  //     }
-      
-  //     $this->packages = $packages;
-  //   }
-  // }
-
-    
   private function find_package($slug)
   {
     if (!isset($slug)) throw new ArgumentException("No slug provided", 1);
@@ -89,7 +44,7 @@ class APIController
       }
 
       if (isset($pkg)) {
-        $name = $pkg['name'];
+        // $name = $pkg['name'];
         $zip = $pkg['zip'];
 
         if (!isset($package['versions'][$version])) {
