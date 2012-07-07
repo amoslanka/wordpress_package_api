@@ -46,10 +46,10 @@ The api uses globbing to find the `release.json` files, and it limits the files 
 
 It is also important to note that the package zip urls provided in `release.json` can be relative urls, if that relativity is anchored to the root content directory. The API Setup section below will go into more detail about this. It is also important to note that the zip content files themselves can live anywhere on the web, so long as the urls reflect their fully qualified location. 
 
-API setup
----------
+Server: API Server setup
+----------------
 
-Copy and paste, git clone, or ftp the files in this repo to a location accessible on the web. This type of endpoint url is recommendable:
+Copy and paste, git clone, or ftp the files in this repo's `server` directory to a location accessible on the web. This type of endpoint url is recommendable:
 ```
 http://api.example.com/wordpress
 ```
@@ -64,8 +64,8 @@ A related constant, DOWNLOADS\_ROOT\_URL, is the web address to the root directo
 
 These two settings will typically coincide, particularly if the web hosting used is a simple shared host. In this case, if the root of the API code were to live on a file system at `http://api.example.com/wordpress` and have a corresponding content root directory at `http://api.example.com/wordpress/downloads`, the downloads directory would normally be a simple child directory of the Wordpress directory on that host file system. If the downloads path followed convention as well, its constant value would be set to `/downloads`, since a relative filesystem path will suffice on a module as simple as this.
 
-API Methods
------------
+Server: API Methods
+-------------------
 
 The API uses simple request params to determine its course of action. The most important param is the `action` param, which tells the controller which action to run. The `action` param is a required parameter on every request made to the API.
 
@@ -137,16 +137,29 @@ Displays all available content names, based on globbable `release.json` files. E
 
 Most of the available API calls mimic or relate closely to methods carried out by the Wordpress Plugins API. 
 
-Plugin and Theme Updaters
--------------------------
-todo
+Client: Plugin and Theme Updaters
+---------------------------------
+Any plugin or theme can be updated from the package server, as long as the packages on the server properly match the format described in the API sections. The `client` directory of this repo contains php classes for updating either plugins or themes. An updater class should be instantiated once for each plugin or theme that should use this system for autoupdates. The plugin and theme classes will take as constructor arguments the content slug, the current content version, and the url at which the API resides.
+
+Examples: 
+
+    // Plugins:
+    // wp-content/plugins/foo-bar.php: 
+    $plugin_updater = new WordpressContentAutoUpdater('plugins', 'foo-bar', 'http://api.example.com/wordpress/')
+
+    // Themes:
+    // wp-content/themes/herp-derp/functions.php: 
+    $theme_updater = new WordpressContentAutoUpdater('themes', 'herp-derp', 'http://api.example.com/wordpress/')
+
+Its generally best for each updater to be instantiated within the initialization code for the particular theme or plugin it will be updating. 
 
 Authentication and Private Data
 -------------------------------
-todo
+todo..
 
 TODOs
 -----
 1. Fully support gzip responses
 2. Support pulling release data in from web location (feed)
-3. Herp the derp
+3. API key integration
+4. Herp the derp

@@ -1,7 +1,7 @@
 <?php
 
 /**
- * @package worpress_package_api
+ * @package WordpressContentAPI
  * @author Amos Lanka
  **/
 class APIController
